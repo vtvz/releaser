@@ -23,7 +23,7 @@ projects:
       - project/api
       - project/service
   project2:
-  	mainBranch: developer
+    mainBranch: developer
     repos:
       - project2/client
       - project2/api
