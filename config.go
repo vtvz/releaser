@@ -20,12 +20,25 @@ type Config struct {
 	MainBranch string `yaml:"mainBranch"`
 }
 
-func ResolveConfig() (Config) {
-	filename, _ := filepath.Abs("./config.yaml")
-	yamlFile, _ := ioutil.ReadFile(filename)
+func ResolveConfig(args *Args) (*Config, error) {
+	filename, err := filepath.Abs(args.ConfigFile)
 	
-	var config Config
-	_ = yaml.Unmarshal(yamlFile, &config)
+	if err != nil {
+		return nil, err;
+	}
+
+	yamlFile, err := ioutil.ReadFile(filename)
+
+	if err != nil {
+		return nil, err;
+	}
+
+	config := new(Config)
+	err = yaml.Unmarshal(yamlFile, config)
+
+	if err != nil {
+		return nil, err;
+	}
 
 	if config.MainBranch == "" {
 		config.MainBranch = "master"
@@ -45,5 +58,5 @@ func ResolveConfig() (Config) {
 		}
 	}
 
-    return config
+    return config, nil
 } 

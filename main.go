@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"os"
 	"regexp"
+	flag "github.com/spf13/pflag"
+	homedir "github.com/mitchellh/go-homedir"
 )
 
 type CommonConfig struct {
@@ -23,48 +25,62 @@ type ReleaseCandidateConfig struct {
 	*CommonConfig
 }
 
-func getArgs() (project, command, version string) {
-	if len(os.Args) != 4 {
-        fmt.Println("Required 3 args:")
-        fmt.Println("<project> <action rc|r> <version in 1.0 format>")
+type Args struct {
+	ConfigFile string
+	Command string
+	Project string
+	Version string
+}
 
-        os.Exit(1)
+func getArgs() (*Args, error) {
+	var args Args
+
+	home, _ := homedir.Dir()
+	flag.StringVarP(&args.ConfigFile, "config", "c", home + "/.releaser.yaml", "Path to config")
+	flag.Parse()
+
+	if flag.NArg() != 3 {
+        return nil, fmt.Errorf("Required 3 args:, <project> <action rc|r> <version in 1.0 format>")
 	}
 
-	project = os.Args[1]
-	command = os.Args[2]
-	version = os.Args[3]
+	args.Project = flag.Arg(0)
+	args.Command = flag.Arg(1)
+	args.Version = flag.Arg(2)
 
-	if command != "r" && command != "rc" {
-        fmt.Println("Second argument should be equal to 'r' or 'rc'")
-        
-        os.Exit(1)
+	if args.Command != "r" && args.Command != "rc" {
+        return nil, fmt.Errorf("Second argument should be equal to 'r' or 'rc'")
 	}
 
-	match, _ := regexp.MatchString("^[\\d]+\\.[\\d]+$", version)
+	match, _ := regexp.MatchString("^[\\d]+\\.[\\d]+$", args.Version)
 	if !match {
-        fmt.Println("Version should be in format MAJ.MIN")
-        
-        os.Exit(1)
+        return nil, fmt.Errorf("Version should be in format MAJ.MIN")
 	}
 
-	return
+	fmt.Printf("%+v\n", args)
+
+	return &args, nil
 }
 
 func main() {	
-	projectKey, command, version := getArgs()
+	args, err := getArgs();
+	if err != nil {
+		panic(err)
+	}
 
-	config := ResolveConfig()
+	config, err := ResolveConfig(args)
+	if err != nil {
+		panic(err)
+	}
 
-	project, ok := config.Projects[projectKey]
+	project, ok := config.Projects[args.Project]
 
 	if !ok {
-		fmt.Printf("Project '%s' is not configured yet\n", projectKey)
+		fmt.Printf("Project '%s' is not configured yet\n", args.Project)
 
         os.Exit(1)
 	}
 
-    fmt.Printf("Selected project is %s\n", projectKey)
+    fmt.Printf("Selected project is %s\n", args.Project)
 
 	git := gitlab.NewClient(nil, project.AccessToken)
 
@@ -87,7 +103,7 @@ func main() {
 	}
 
 	var releaseNotes string
-	if command == "r" {
+	if args.Command == "r" {
 	    releaseNotesBytes, err := CaptureInputFromEditor()
 
 	    if err != nil {
@@ -98,19 +114,19 @@ func main() {
 	}
 
 	for _, gitlabProject := range gitlabProjects {
-		rcBranchName := "rc-" + version + ".x"
+		rcBranchName := "rc-" + args.Version + ".x"
 
 		config := &CommonConfig{
 			GitlabProject: gitlabProject,
 			ProjectConfig: project,
 			RcBranchName: rcBranchName,
-			Version: version,
+			Version: args.Version,
 		}
 
 		fmt.Printf("Manage project: %s\n", gitlabProject.PathWithNamespace)
 
 		var err error
-	    switch command {
+	    switch args.Command {
 	    case "rc":
 	    	err = CommandReleaseCandidate(git, &ReleaseCandidateConfig{CommonConfig: config})
 	    case "r":
