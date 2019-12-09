@@ -4,7 +4,7 @@ This tool helps to create release branches and tags in Gitlab multi-repository p
 
 ## Install
 
-Coming soon. You can clone repository and `go build`.
+Coming soon. You can clone repository and `go build`. Or ask me to send you binary file.
 
 ## Usage
 
