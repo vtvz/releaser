@@ -40,11 +40,11 @@ func getArgs() (*Args, error) {
 	flag.Parse()
 
 	if flag.NArg() != 3 {
-		return nil, fmt.Errorf("Required 3 args:, <project> <action rc|r> <version in 1.0 format>")
+		return nil, fmt.Errorf("Required 3 args:, <action rc|r> <project> <version in 1.0 format>")
 	}
 
-	args.Project = flag.Arg(0)
-	args.Command = flag.Arg(1)
+	args.Command = flag.Arg(0)
+	args.Project = flag.Arg(1)
 	args.Version = flag.Arg(2)
 
 	if args.Command != "r" && args.Command != "rc" {
