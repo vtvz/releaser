@@ -12,30 +12,30 @@ Imagine you have a large project with multiple repositories:
 - landing
 - etc...
 
-Your release flow is folowing:
+Your release flow is the following:
 
 - create release candidate branch (`rc-1.0.x`) in each repository
 - stabilize all components
-- create release tag on release branches in each repository (`v1.0.0`)
+- create release tag for release branches in each repository (`v1.0.0`)
 - deploy all components
 
-There is already 12 manual actions for 4 repository!
+There already are 12 manual actions for 4 repositories!
 
-And after a some time later you find a little critical bug on production.
+And after some time you find a little critical bug on production.
 
 - fix this bug
-- create incremented release tag on release branches in each repository (`v1.0.1`)
+- create incremented release tag for release branches in each repository (`v1.0.1`)
 - deploy all components
 
-Another 8 manual actions. There is too many manual jobs to be forgotten or done wrong.
+Another 8 manual actions. There are too many manual jobs that can be forgotten or done wrong.
 
-This little tool helps to create release branches and tags in all project repositories in one command (simultaneous deployment will be in future).
+This little tool helps to create release branches and tags in all project repositories in one command (simultaneous deployment will be in the future).
 
-Just run `releaser rc projectName 1.0` to make `rc-1.0.x` release candidate branches in all repositories.
+Just run `releaser rc projectName 1.0` to create `rc-1.0.x` release candidate branches in all repositories.
 
-And when you feel this candidate is stable enough to be deployed to production run `releaser r projectName 1.0` and `1.0.0` release tags will be created in each repository on `rc-1.0.x` bracnhes.
+And when you feel this candidate is stable enough to be deployed to production, run `releaser r projectName 1.0` and `1.0.0` release tags will be created in each repository on `rc-1.0.x` bracnhes.
 
-If current release has a problem needed to be fixed just apply changes to `rc-1.0.x` branch and after testing and further stabilization run `releaser r projectName 1.0` command to create brand new tags with increased patch version `1.0.1`.
+If current release has a problem which needs to be fixed? just apply changes to `rc-1.0.x` branch and after testing and further stabilization run `releaser r projectName 1.0` command to create brand new tags with increased patch version `1.0.1`.
 
 ## Install
 
