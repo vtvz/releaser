@@ -2,6 +2,41 @@
 
 This tool helps to create release branches and tags in Gitlab multi-repository projects.
 
+## Problem
+
+Imagine you have a large project with multiple repositories:
+
+- frontend
+- backend
+- service
+- landing
+- etc...
+
+Your release flow is the following:
+
+- create release candidate branch (`rc-1.0.x`) in each repository
+- stabilize all components
+- create release tag for release branches in each repository (`v1.0.0`)
+- deploy all components
+
+There already are 12 manual actions for 4 repositories!
+
+And after some time you find a little critical bug on production.
+
+- fix this bug
+- create incremented release tag for release branches in each repository (`v1.0.1`)
+- deploy all components
+
+Another 8 manual actions. There are too many manual jobs that can be forgotten or done wrong.
+
+This little tool helps to create release branches and tags in all project repositories in one command (simultaneous deployment will be in the future).
+
+Just run `releaser rc projectName 1.0` to create `rc-1.0.x` release candidate branches in all repositories.
+
+And when you feel this candidate is stable enough to be deployed to production, run `releaser r projectName 1.0` and `1.0.0` release tags will be created in each repository on `rc-1.0.x` bracnhes.
+
+If current release has a problem which needs to be fixed? just apply changes to `rc-1.0.x` branch and after testing and further stabilization run `releaser r projectName 1.0` command to create brand new tags with increased patch version `1.0.1`.
+
 ## Install
 
 Coming soon. You can clone repository and `go build`. Or ask me to send you binary file.
@@ -31,8 +66,8 @@ projects:
 
 ```
 
-Run `releaser project1 rc 1.0` to create `rc-1.0.x` release candidate branch and merge request to `mainBranch` in all three `project1` repositories.
+Run `releaser rc project1 1.0` to create `rc-1.0.x` release candidate branch and merge request to `mainBranch` in all three `project1` repositories.
 
-Run `releaser project1 r 1.0` to create `v1.0.0` release tag on `rc-1.0.x` branch in all three `project1` repositories.
+Run `releaser r project1 1.0` to create `v1.0.0` release tag on `rc-1.0.x` branch in all three `project1` repositories.
 
-Run `releaser project1 r 1.0` to create next release tag `v1.0.1`
+Run `releaser r project1 1.0` to create next release tag `v1.0.1`
