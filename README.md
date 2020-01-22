@@ -37,9 +37,24 @@ And when you feel this candidate is stable enough to be deployed to production, 
 
 If current release has a problem which needs to be fixed? just apply changes to `rc-1.0.x` branch and after testing and further stabilization run `releaser r projectName 1.0` command to create brand new tags with increased patch version `1.0.1`.
 
-## Install
+## Download
 
-Coming soon. You can clone repository and `go build`. Or ask me to send you binary file.
+Download bin-file for your OS:
+- [Linux amd64](./bin/releaser-linux-amd64)
+- [MacOS amd64](./bin/releaser-darwin-amd64)
+
+## Install
+### Linux
+```bash
+sudo curl -L https://raw.githubusercontent.com/vtvz/releaser/master/bin/releaser-linux-amd64 -o /usr/local/bin/releaser
+sudo chmod +x /usr/local/bin/releaser
+```
+
+### MacOS
+```bash
+sudo curl -L https://raw.githubusercontent.com/vtvz/releaser/master/bin/releaser-darwin-amd64 -o /usr/local/bin/releaser
+sudo chmod +x /usr/local/bin/releaser
+```
 
 ## Usage
 
