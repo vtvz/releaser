@@ -61,6 +61,8 @@ chmod +x /usr/local/bin/releaser
 Make `.releaser.yaml` file in home directory with similar content:
 
 ```yaml
+# Access token can be obtained here (api scope)
+# https://gitlab.axmit.com/profile/personal_access_tokens
 accessToken: "<default_secret>"
 baseUrl: https://gitlab.local.com/
 
