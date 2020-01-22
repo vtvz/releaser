@@ -52,8 +52,8 @@ sudo chmod +x /usr/local/bin/releaser
 
 ### MacOS
 ```bash
-sudo curl -L https://raw.githubusercontent.com/vtvz/releaser/master/bin/releaser-darwin-amd64 -o /usr/local/bin/releaser
-sudo chmod +x /usr/local/bin/releaser
+curl -L https://raw.githubusercontent.com/vtvz/releaser/master/bin/releaser-darwin-amd64 -o /usr/local/bin/releaser
+chmod +x /usr/local/bin/releaser
 ```
 
 ## Usage
