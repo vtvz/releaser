@@ -1,7 +1,7 @@
-build-linux:
+build-mac:
 	GOOS=darwin GOARCH=amd64 go build -o bin/releaser-darwin-amd64
 
-build-mac:
+build-linux:
 	GOOS=linux GOARCH=amd64 go build -o bin/releaser-linux-amd64
 
-build: build-mac build-linux
+build: build-linux build-mac

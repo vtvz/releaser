@@ -12,7 +12,7 @@ func getOrCreateBranch(git *gitlab.Client, config *ReleaseCandidateConfig) (*git
 		return branch, true, nil
 	}
 
-	if response.Response.StatusCode != 404 {
+	if nil == response || response.Response.StatusCode != 404 {
 		return nil, false, err
 	}
 
@@ -61,11 +61,10 @@ func CommandReleaseCandidate(git *gitlab.Client, config *ReleaseCandidateConfig)
 
 	mergeRequestTitle := fmt.Sprintf("Release candidate %s.x", config.CommonConfig.Version)
 
-	master := "master"
 	mergeRequest, _, err := git.MergeRequests.CreateMergeRequest(config.CommonConfig.GitlabProject.ID, &gitlab.CreateMergeRequestOptions{
 		Title:        &mergeRequestTitle,
 		SourceBranch: &config.CommonConfig.RcBranchName,
-		TargetBranch: &master,
+		TargetBranch: &config.CommonConfig.ProjectConfig.MainBranch,
 	})
 
 	if err != nil {
